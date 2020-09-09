@@ -61,12 +61,31 @@ namespace HQ78.Recipe.Api.Helpers
 
             IType graphQLRootType;
             var rootTypeName = namingConventions.GetTypeName(rootType);
+            var flags = BindingFlags.Public | BindingFlags.Instance;
+
+            var members = Enumerable.Concat<MemberInfo>(
+                rootType.GetFields(flags),
+                rootType.GetProperties(flags)
+            );
 
             switch (graphQLType)
             {
                 case TypeKind.Object:
+                    var ctor = typeof(ObjectType<>)
+                        .MakeGenericType(rootType)
+                        .GetConstructor(new Type[] { typeof(Action<>).MakeGenericType(IObjectTypeDescriptor<>) })
+                        ?? throw new Exception();
+
                     graphQLRootType = new ObjectType(
-                        desc => desc.Name(rootTypeName)
+                        desc =>
+                        {
+                            desc.Name(rootTypeName);
+
+                            foreach (var member in members)
+                            {
+                                
+                            }
+                        }
                     );
 
                     break;
@@ -79,13 +98,6 @@ namespace HQ78.Recipe.Api.Helpers
                 default:
                     throw new NotImplementedException();
             }
-
-            var flags = BindingFlags.Public | BindingFlags.Instance;
-
-            var members = Enumerable.Concat<MemberInfo>(
-                rootType.GetFields(flags),
-                rootType.GetProperties(flags)
-            );
 
             throw new NotImplementedException();
         }
