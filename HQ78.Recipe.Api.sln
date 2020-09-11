@@ -5,12 +5,16 @@ VisualStudioVersion = 16.0.30404.54
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HQ78.Recipe.Api", "HQ78.Recipe.Api\HQ78.Recipe.Api.csproj", "{1D8D3EC4-82DD-4CD3-B78B-E73A86AA4AFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQ78.Recipe.Api.Tests", "HQ78.Recipe.Api.Tests\HQ78.Recipe.Api.Tests.csproj", "{3622CACE-3552-4D95-AFE8-0EBF73F939CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HQ78.Recipe.Api.Tests", "HQ78.Recipe.Api.Tests\HQ78.Recipe.Api.Tests.csproj", "{3622CACE-3552-4D95-AFE8-0EBF73F939CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DAA5213B-BD67-4D77-9BEA-EC9042272E70}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQ78.Recipe.RecipeImporter", "HQ78.Recipe.RecipeImporter\HQ78.Recipe.RecipeImporter.csproj", "{803C360D-7D02-4B43-9618-A98B3F1A1C52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQ78.Recipe.DataLayer", "HQ78.Recipe.DataLayer\HQ78.Recipe.DataLayer.csproj", "{1940A956-EFD4-4EC8-B839-4D2193AB3C40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +30,14 @@ Global
 		{3622CACE-3552-4D95-AFE8-0EBF73F939CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3622CACE-3552-4D95-AFE8-0EBF73F939CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3622CACE-3552-4D95-AFE8-0EBF73F939CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{803C360D-7D02-4B43-9618-A98B3F1A1C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{803C360D-7D02-4B43-9618-A98B3F1A1C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{803C360D-7D02-4B43-9618-A98B3F1A1C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{803C360D-7D02-4B43-9618-A98B3F1A1C52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1940A956-EFD4-4EC8-B839-4D2193AB3C40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1940A956-EFD4-4EC8-B839-4D2193AB3C40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1940A956-EFD4-4EC8-B839-4D2193AB3C40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1940A956-EFD4-4EC8-B839-4D2193AB3C40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
