@@ -42,29 +42,29 @@ namespace HQ78.Recipe.Api
                     Configuration.GetValue<string>("DatabaseName")
                 );
 
-            services.AddGraphQL(
-                sp =>
-                {
-                    var schema = SchemaBuilder.New()
-                        //.EnableRelaySupport()
-                        .AddType<ThingTypeDescriptor>()
-                        .AddServices(sp)
-                        //.AddObjectType<OneOrManyTypeDescriptor>()
-                        //.Use(next => context =>
-                        //{
-                        //    return Task.CompletedTask;
-                        //})
-                        //.AddObjectType<ThingTypeDescriptor>()
-                        .AddObjectType<SchemaOrgTypeDescriptor<SRecipe>>()
-                        //.AddObjectType<RecipeTypeDescriptor>()
-                        .AddQueryType(d => d.Name(QueryConstants.QueryTypeName))
-                        //.AddType<RecipeQueryType>()
-                        .AddType<HelloWorldQueryType>()
-                        .Create();
+            //services.AddGraphQL(
+            //    sp =>
+            //    {
+            //        var schema = SchemaBuilder.New()
+            //            //.EnableRelaySupport()
+            //            .AddType<ThingTypeDescriptor>()
+            //            .AddServices(sp)
+            //            //.AddObjectType<OneOrManyTypeDescriptor>()
+            //            //.Use(next => context =>
+            //            //{
+            //            //    return Task.CompletedTask;
+            //            //})
+            //            //.AddObjectType<ThingTypeDescriptor>()
+            //            .AddObjectType<SchemaOrgTypeDescriptor<SRecipe>>()
+            //            //.AddObjectType<RecipeTypeDescriptor>()
+            //            .AddQueryType(d => d.Name(QueryConstants.QueryTypeName))
+            //            //.AddType<RecipeQueryType>()
+            //            .AddType<HelloWorldQueryType>()
+            //            .Create();
 
-                    return schema;
-                }
-            );
+            //        return schema;
+            //    }
+            //);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
