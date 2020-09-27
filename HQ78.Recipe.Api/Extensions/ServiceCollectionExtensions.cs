@@ -9,15 +9,6 @@ namespace HQ78.Recipe.Api.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection MapBsonClass<TClass>(
-            this IServiceCollection serviceDescriptors
-        )
-        {
-            BsonClassMap.RegisterClassMap<TClass>();
-
-            return serviceDescriptors;
-        }
-
         public static IServiceCollection MapBsonClass<TClass, TBsonMapper>(
             this IServiceCollection serviceDescriptors
         )

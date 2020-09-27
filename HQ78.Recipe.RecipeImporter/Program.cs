@@ -3,22 +3,15 @@ using HtmlAgilityPack;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
-using Schema.NET;
 using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
 using System.Xml.XPath;
 
 namespace HQ78.Recipe.RecipeImporter
 {
-    class Program
+    public class Program
     {
         static async Task Main(string[] args)
         {
@@ -29,59 +22,88 @@ namespace HQ78.Recipe.RecipeImporter
 
         public static async Task HandleCliOptions(CliOptions options)
         {
-            using var httpClient = new HttpClient();
-
-            var url = options.Url ?? "https://www.allrecipes.com/recipe/24771/basic-mashed-potatoes/";
-
-            var message = new HttpRequestMessage(
-                HttpMethod.Get,
-                url
-            );
-
-            var response = await httpClient
-                .SendAsync(message)
-                .ConfigureAwait(false);
-
-            var rawHtml = await response.Content
-                .ReadAsStringAsync()
-                .ConfigureAwait(false);
-
             var html = new HtmlDocument();
-            html.LoadHtml(rawHtml);
 
-            var querySelector = options.XPathSelector ?? "//script[@type='application/ld+json']";
+            if (options.Url.IsFile)
+            {
+                html.Load(options.Url.AbsolutePath);
+            }
+            else
+            {
+                using var httpClient = new HttpClient();
+
+                var message = new HttpRequestMessage(
+                    HttpMethod.Get,
+                    options.Url
+                );
+
+                var response = await httpClient
+                    .SendAsync(message)
+                    .ConfigureAwait(false);
+
+                var rawHtml = await response.Content
+                    .ReadAsStringAsync()
+                    .ConfigureAwait(false);
+
+                html.LoadHtml(rawHtml);
+            }
 
             var scriptNode = html.DocumentNode.SelectSingleNode(
-                XPathExpression.Compile(querySelector)
+                XPathExpression.Compile(options.XPathSelector)
             );
 
             var json = JArray.Parse(scriptNode.InnerText);
+            const string idElName = "id";
 
             var recipes = json
                 .Where(n => n.Value<string>("@type") == "Recipe")
                 .Select(
                     n =>
                     {
-                        var doc = BsonDocument.Parse(n.ToString());
+                        if (BsonDocument.TryParse(n.ToString(), out var doc))
+                        {
+                            // Only set the identifier if not already set.
+                            if (!doc.Contains(idElName))
+                                doc.Add(new BsonElement(idElName, options.Url.ToString()));
 
-                        if (!doc.Contains("identifier"))
-                            doc.Add(new BsonElement("identifier", url));
+                            return doc;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Unable to parse schema, invalid format.");
 
-                        return doc;
+                            return null;
+                        }
                     }
                 )
+                .Where(l => l is object)
                 .ToList();
 
-            var dbName = options.DatabaseName ?? "hq78-recipe-db";
-            var connectionString = options.DbConnectionString ?? "mongodb://localhost:27017";
+            var dbName = options.DatabaseName;
+            var connectionString = options.DbConnectionString;
             var mongoDbClient = new MongoClient(connectionString);
             var database = mongoDbClient.GetDatabase(dbName);
-            var recipeRepository = database.GetCollection<BsonDocument>("Recipes");
-
-            await recipeRepository.InsertManyAsync(recipes).ConfigureAwait(false);
+            var recipeRepository = database.GetCollection<BsonDocument>(options.TableName);
 
             foreach (var recipe in recipes)
-                Console.WriteLine(recipe["name"].AsString);
+            {
+                // Remove all entries with the same identifier.
+                await recipeRepository
+                    .FindOneAndReplaceAsync(
+                        Builders<BsonDocument>.Filter.Eq(
+                            idElName,
+                            options.Url.ToString()
+                        ),
+                        recipe,
+                        new FindOneAndReplaceOptions<BsonDocument, BsonDocument>()
+                        {
+                            IsUpsert = true
+                        }
+                    )
+                    .ConfigureAwait(false);
+
+                Console.WriteLine($"{recipe["name"].AsString} - {recipe["_id"].AsObjectId}");
+            }
         }
     }
 }

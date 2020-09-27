@@ -19,7 +19,6 @@
     },
     "HQ78.Recipe.Api": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "api/graphql/playground",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HQ78.Recipe.RecipeImporter": {
+      "commandName": "Project",
+      "commandLineArgs": "--url \"https://www.allrecipes.com/recipe/24771/basic-mashed-potatoes/\""
+    }
+  }
+}

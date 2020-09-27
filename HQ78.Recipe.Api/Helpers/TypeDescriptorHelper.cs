@@ -71,10 +71,10 @@ namespace HQ78.Recipe.Api.Helpers
             switch (graphQLType)
             {
                 case TypeKind.Object:
-                    var ctor = typeof(ObjectType<>)
-                        .MakeGenericType(rootType)
-                        .GetConstructor(new Type[] { typeof(Action<>).MakeGenericType(IObjectTypeDescriptor<>) })
-                        ?? throw new Exception();
+                    //var ctor = typeof(ObjectType<>)
+                    //    .MakeGenericType(rootType)
+                    //    .GetConstructor(new Type[] { typeof(Action<>).MakeGenericType(IObjectTypeDescriptor<>) })
+                    //    ?? throw new Exception();
 
                     graphQLRootType = new ObjectType(
                         desc =>

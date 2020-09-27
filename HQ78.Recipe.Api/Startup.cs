@@ -4,9 +4,11 @@ using HotChocolate.AspNetCore.GraphiQL;
 using HotChocolate.AspNetCore.Voyager;
 using HotChocolate.Types.Descriptors;
 using HQ78.Recipe.Api.BsonMappers;
+using HQ78.Recipe.Api.Conventions;
 using HQ78.Recipe.Api.Extensions;
 using HQ78.Recipe.Api.GraphQL.Queries;
 using HQ78.Recipe.Api.GraphQL.Types;
+using HQ78.Recipe.Api.Helpers;
 using HQ78.Recipe.Api.Models;
 using HQ78.Recipe.Api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +17,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
 using Schema.NET;
 using System;
 using System.Threading.Tasks;
@@ -35,12 +39,134 @@ namespace HQ78.Recipe.Api
         {
             services.AddControllers();
 
+            #region MongoDB
+
+            var conventionPack = new ConventionPack
+            {
+                new CamelCaseElementNameConvention()
+            };
+
+            ConventionRegistry.Register(
+                "camelCase",
+                conventionPack,
+                t => true
+            );
+
+            //BsonClassMap.RegisterClassMap<SRecipe>(
+            //    x => new RecipeMapper().SetupBsonMapping(x)
+            //);
+
+            BsonClassMap.RegisterClassMap<JsonLdObject>(
+                x => new JsonLdObjectMapper().SetupBsonMapping(x)
+            );
+
+            BsonClassMap.RegisterClassMap<Thing>(
+                x => new ThingMapper().SetupBsonMapping(x)
+            );
+
+            BsonSerializer.RegisterSerializationProvider(
+                new ValuesSerializerProvider()
+            );
+
+            BsonSerializer.RegisterGenericSerializerDefinition(
+                typeof(OneOrMany<>),
+                typeof(OneOrManySerializer<>)
+            );
+
+            MongoDbHelper.Default
+                .MapInterfaceToDefaultImplementation<IAggregateRating>()
+                .MapInterfaceToDefaultImplementation<IClaimReview>()
+                .MapInterfaceToDefaultImplementation<IClip>()
+                .MapInterfaceToDefaultImplementation<ICreativeWork>()
+                .MapInterfaceToDefaultImplementation<IDemand>()
+                .MapInterfaceToDefaultImplementation<IHowTo>()
+                .MapInterfaceToDefaultImplementation<IHowToSection>()
+                .MapInterfaceToDefaultImplementation<IHowToDirection>()
+                .MapInterfaceToDefaultImplementation<IHowToItem>()
+                .MapInterfaceToDefaultImplementation<IHowToStep>()
+                .MapInterfaceToDefaultImplementation<IHowToSupply>()
+                .MapInterfaceToDefaultImplementation<IHowToTip>()
+                .MapInterfaceToDefaultImplementation<IHowToTool>()
+                .MapInterfaceToDefaultImplementation<IIntangible>()
+                .MapInterfaceToDefaultImplementation<IImageGallery>()
+                .MapInterfaceToDefaultImplementation<IImageObject>()
+                .MapInterfaceToDefaultImplementation<IItemList>()
+                .MapInterfaceToDefaultImplementation<IMonetaryAmount>()
+                .MapInterfaceToDefaultImplementation<INutritionInformation>()
+                .MapInterfaceToDefaultImplementation<IOrganization>()
+                .MapInterfaceToDefaultImplementation<IPerson>()
+                .MapInterfaceToDefaultImplementation<IPublicationEvent>()
+                .MapInterfaceToDefaultImplementation<IQuantitativeValue>()
+                .MapInterfaceToDefaultImplementation<IRating>()
+                .MapInterfaceToDefaultImplementation<IRecipe>()
+                .MapInterfaceToDefaultImplementation<IReview>()
+                .MapInterfaceToDefaultImplementation<IReviewAction>()
+                .MapInterfaceToDefaultImplementation<IStructuredValue>()
+                .MapInterfaceToDefaultImplementation<IThing, Thing>(x => x.Name)
+                .MapInterfaceToDefaultImplementation<IVideoObject>();
+
+            //BsonSerializer.RegisterSerializer(
+            //    typeof(IThing),
+            //    new ThingSerializer()
+            //);
+
+            BsonSerializer.RegisterSerializer(
+                typeof(TimeSpan),
+                new TimeSpanSerializer()
+            );
+
+            BsonSerializer.RegisterSerializer(
+                typeof(JsonLdContext),
+                new JsonLdContextSerializer()
+            );
+
+            BsonSerializer.RegisterGenericSerializerDefinition(
+                typeof(Values<,>),
+                typeof(ValuesSerializer<,>)
+            );
+
+            BsonSerializer.RegisterGenericSerializerDefinition(
+                typeof(Values<,,>),
+                typeof(ValuesSerializer<,,>)
+            );
+
+            BsonSerializer.RegisterGenericSerializerDefinition(
+                typeof(Values<,,,>),
+                typeof(ValuesSerializer<,,,>)
+            );
+
+            BsonSerializer.RegisterGenericSerializerDefinition(
+                typeof(Values<,,,,,,>),
+                typeof(ValuesSerializer<,,,,,,>)
+            );
+
+            //BsonSerializer.RegisterDiscriminatorConvention(
+            //    typeof(Values<,>),
+            //    new SchemaValuesConvention()
+            //);
+
+            //BsonSerializer.RegisterDiscriminatorConvention(
+            //    typeof(Values<,,>),
+            //    new SchemaValuesConvention()
+            //);
+
+            //BsonSerializer.RegisterDiscriminatorConvention(
+            //    typeof(Values<,,,>),
+            //    new SchemaValuesConvention()
+            //);
+
+            //BsonSerializer.RegisterDiscriminatorConvention(
+            //    typeof(Values<,,,,,,>),
+            //    new SchemaValuesConvention()
+            //);
+
             services
-                .MapBsonClass<SRecipe, RecipeMapper>()
                 .AddMongoDb(
                     Configuration.GetConnectionString("RecipeDb"),
                     Configuration.GetValue<string>("DatabaseName")
                 );
+
+            #endregion
 
             //services.AddGraphQL(
             //    sp =>
@@ -84,17 +210,17 @@ namespace HQ78.Recipe.Api
 
             #region GraphQL
 
-            const string GRAPH_QL_PATH = "/api/graphql";
+            //const string GRAPH_QL_PATH = "/api/graphql";
 
-            app
-                .UseGraphQL(GRAPH_QL_PATH)
-                //.UseGraphiQL()
-                    //new GraphiQLOptions
-                    //{
-                    //    Path = "/graphql"
-                    //})
-                .UsePlayground(GRAPH_QL_PATH, GRAPH_QL_PATH + "/playground")
-                .UseVoyager(GRAPH_QL_PATH, GRAPH_QL_PATH + "/voyager");
+            //app
+            //    .UseGraphQL(GRAPH_QL_PATH)
+            //    //.UseGraphiQL()
+            //        //new GraphiQLOptions
+            //        //{
+            //        //    Path = "/graphql"
+            //        //})
+            //    .UsePlayground(GRAPH_QL_PATH, GRAPH_QL_PATH + "/playground")
+            //    .UseVoyager(GRAPH_QL_PATH, GRAPH_QL_PATH + "/voyager");
 
             #endregion
 
