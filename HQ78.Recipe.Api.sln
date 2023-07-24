@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30404.54
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HQ78.Recipe.Api", "HQ78.Recipe.Api\HQ78.Recipe.Api.csproj", "{1D8D3EC4-82DD-4CD3-B78B-E73A86AA4AFD}"
 EndProject
@@ -12,9 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQ78.Recipe.RecipeImporter", "HQ78.Recipe.RecipeImporter\HQ78.Recipe.RecipeImporter.csproj", "{803C360D-7D02-4B43-9618-A98B3F1A1C52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HQ78.Recipe.RecipeImporter", "HQ78.Recipe.RecipeImporter\HQ78.Recipe.RecipeImporter.csproj", "{803C360D-7D02-4B43-9618-A98B3F1A1C52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQ78.Recipe.DataLayer", "HQ78.Recipe.DataLayer\HQ78.Recipe.DataLayer.csproj", "{1940A956-EFD4-4EC8-B839-4D2193AB3C40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HQ78.Recipe.DataLayer", "HQ78.Recipe.DataLayer\HQ78.Recipe.DataLayer.csproj", "{1940A956-EFD4-4EC8-B839-4D2193AB3C40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

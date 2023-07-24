@@ -1,11 +1,13 @@
 ﻿using HotChocolate.Language;
 using HotChocolate.Types;
 using HotChocolate.Types.Descriptors;
+using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace HQ78.Recipe.Api.Helpers
@@ -30,7 +32,8 @@ namespace HQ78.Recipe.Api.Helpers
 
         public TypeDescriptorHelper(
             INamingConventions namingConventions,
-            ITypeInspector typeInspector
+            ITypeInspector typeInspector,
+            ObjectPool<StringBuilder> pooledStringBuilder
         )
         {
             this.namingConventions = namingConventions;
@@ -42,7 +45,8 @@ namespace HQ78.Recipe.Api.Helpers
             );
 
             xmlDocumentationProvider = new XmlDocumentationProvider(
-                new XmlDocumentationFileResolver()
+                new XmlDocumentationFileResolver(),
+                pooledStringBuilder
             );
         }
 

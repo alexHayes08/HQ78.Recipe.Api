@@ -1,19 +1,9 @@
-using HotChocolate;
-using HotChocolate.AspNetCore;
-using HotChocolate.AspNetCore.GraphiQL;
-using HotChocolate.AspNetCore.Voyager;
-using HotChocolate.Types.Descriptors;
 using HQ78.Recipe.Api.BsonMappers;
 using HQ78.Recipe.Api.Conventions;
 using HQ78.Recipe.Api.Extensions;
-using HQ78.Recipe.Api.GraphQL.Queries;
-using HQ78.Recipe.Api.GraphQL.Types;
 using HQ78.Recipe.Api.Helpers;
-using HQ78.Recipe.Api.Models;
-using HQ78.Recipe.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,8 +11,6 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using Schema.NET;
 using System;
-using System.Threading.Tasks;
-using SRecipe = Schema.NET.Recipe;
 
 namespace HQ78.Recipe.Api
 {

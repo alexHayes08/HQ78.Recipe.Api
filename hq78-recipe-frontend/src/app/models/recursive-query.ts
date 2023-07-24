@@ -1,2 +1,3 @@
-export class RecursiveQuery {
+export class RecursiveQuery<T> {
+    [TKey in keyof T]?: boolean;
 }
